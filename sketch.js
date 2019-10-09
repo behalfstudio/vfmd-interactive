@@ -11,7 +11,7 @@ var prevChar1 = "", prevChar2 = "", prevChar3 = "";
 var colors;
 var colors1, colors2, colors3;
 var randColor1, randColor2, randColor3;
-var huesAmount = 6;
+var huesAmount;
 
 var startX, startY;
 var x, y;
@@ -111,6 +111,7 @@ function setup() {
                "",        //
              ],
            ];
+  huesAmount = 6;
 
   // margin border
   margin = 108;
