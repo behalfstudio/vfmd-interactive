@@ -147,12 +147,6 @@ function draw() {
     x = startX;
     y = startY + (textHeight * line);
 
-    // draw a baseline
-    stroke(0);
-    // line(startX, y, windowWidth - startX, y);
-    rect(startX, y, availableRegionWidth, 0);
-    noStroke();
-
     for (var i = 0; i < currentLine1.length; i++) {
       // layer 3
       fill(colors3[currentLetter]);
@@ -296,6 +290,135 @@ function isCurrentLayerRepeated(_char, _prevChar) {
 
 /*------------------------------------------------------------------*/
 
+function pickColors(_uni1, _uni2) {
+  var stillPicking = true;
+  var randHue1, randHue2, randHue3;
+
+  var variation1 = parseInt(_uni1[_uni1.length - 1]),
+      variation2 = parseInt(_uni2[_uni2.length - 1]);
+
+  randColor1 = "";
+  randColor2 = "";
+  randColor3 = "";
+
+  while (stillPicking) {
+    randColor1 = "";
+    randColor2 = "";
+    randColor3 = "";
+
+    // layer 3
+    while (randColor3 == "") {
+      randHue3 = int(random(0, huesAmount));
+      randColor3 = colors[randHue3][0];
+    }
+
+    // layer 1
+    if (variation1 >= 5) {
+      // layer 1 is a stroke
+      while (randColor1 == "") {
+        randHue1 = int(random(0, huesAmount));
+        randColor1 = colors[randHue1][1];
+      }
+    }
+    else {
+      // layer 1 is a fill
+      while (randColor1 == "") {
+        randHue1 = int(random(0, huesAmount));
+        randColor1 = colors[randHue1][int(random(0, 2))];
+      }
+    }
+
+    // layer 2
+    if (variation2 < 5) {
+      // layer 2 is a stroke
+      while (randColor2 == "") {
+        randHue2 = int(random(0, huesAmount));
+        randColor2 = colors[randHue2][1];
+      }
+    }
+    else {
+      // layer 2 is a fill
+      while (randColor2 == "") {
+        randHue2 = int(random(0, huesAmount));
+        randColor2 = colors[randHue2][int(random(0, 2))];
+      }
+    }
+
+    print("1 " + randColor1 + " " + randHue1);
+    print("2 " + randColor2 + " " + randHue2);
+    print("3 " + randColor3 + " " + randHue3);
+
+    stillPicking = !checkColors(randColor1, randColor2, randColor3, randHue1, randHue2, randHue3);
+  }
+}
+
+function checkColors(_color1, _color2, _color3, _hue1, _hue2, _hue3) {
+
+  // check if the hues are repeated
+  if (_hue1 > 1 && _hue2 > 1 && _hue3 > 1) {
+  }
+  else {
+    if ((_hue1 != _hue2) && (_hue2 != _hue3) && (_hue3 != _hue1)) {
+    }
+    else {
+      return false;
+    }
+  }
+
+  // check if the colors are repeated with those of the previous letter
+  if (
+      // if this is the first letter
+      (letterCount <= 1) &&
+      (_color1 != _color2 && _color2 != _color3 && _color3 != _color1)
+    )
+  {
+  }
+  else {
+    if (_color1 == _color2 || _color2 == _color3 || _color3 == _color1) {
+      return false;
+    }
+
+    // if not, check with the previous letter
+    var countRepeatedColors = 0;
+
+    if (_color1 == colors1[letterCount - 2]) {
+      countRepeatedColors++;
+    }
+    if (_color2 == colors1[letterCount - 2]) {
+      countRepeatedColors++;
+    }
+    if (_color3 == colors1[letterCount - 2]) {
+      countRepeatedColors++;
+    }
+    if (_color1 == colors2[letterCount - 2]) {
+      countRepeatedColors++;
+    }
+    if (_color2 == colors2[letterCount - 2]) {
+      countRepeatedColors++;
+    }
+    if (_color3 == colors2[letterCount - 2]) {
+      countRepeatedColors++;
+    }
+    if (_color1 == colors3[letterCount - 2]) {
+      countRepeatedColors++;
+    }
+    if (_color2 == colors3[letterCount - 2]) {
+      countRepeatedColors++;
+    }
+    if (_color3 == colors3[letterCount - 2]) {
+      return false;
+    }
+
+    if (countRepeatedColors > 1) {
+      return false;
+    }
+  }
+
+  return true;
+}
+
+/*------------------------------------------------------------------*/
+
 function pushCharacter(_key) {
   var uni1 = "", uni2 = "", uni3 = "";
   var lastVar1;
@@ -368,91 +491,7 @@ function pushCharacter(_key) {
 
   letterCount++;
 
-  // pick random colors
-  var isRepeatedHue = true, isRepeatedColor = true;
-  var randColor1, randColor2, randColor3;
-  var randHue1, randHue2, randHue3;
-
-  var variation1 = parseInt(uni1[uni1.length - 1]),
-      variation2 = parseInt(uni2[uni2.length - 1]);
-
-  while (isRepeatedColor || isRepeatedHue) {
-    isRepeatedHue = true;
-    isRepeatedColor = true;
-
-    randColor1 = "";
-    randColor2 = "";
-    randColor3 = "";
-
-    // layer 3
-    while (randColor3 == "") {
-      randHue3 = int(random(0, colorsAmount));
-      randColor3 = colors[randHue3][0];
-    }
-
-    // layer 1
-    if (variation1 >= 5) {
-      // layer 1 is a stroke
-      while (randColor1 == "") {
-        randHue1 = int(random(0, colorsAmount));
-        randColor1 = colors[randHue1][1];
-      }
-    }
-    else {
-      // layer 1 is a fill
-      while (randColor1 == "") {
-        randHue1 = int(random(0, colorsAmount));
-        randColor1 = colors[randHue1][int(random(0, 2))];
-      }
-    }
-
-    // layer 2
-    if (variation2 < 5) {
-      // layer 2 is a stroke
-      while (randColor2 == "") {
-        randHue2 = int(random(0, colorsAmount));
-        randColor2 = colors[randHue2][1];
-      }
-    }
-    else {
-      // layer 2 is a fill
-      while (randColor2 == "") {
-        randHue2 = int(random(0, colorsAmount));
-        randColor2 = colors[randHue2][int(random(0, 2))];
-      }
-    }
-
-    // check if the colors have the same hue
-    if ((randHue1 != randHue2) && (randHue2 != randHue3) && (randHue3 != randHue1)) {
-      isRepeatedHue = false;
-    }
-
-    // check if the colors are repeated
-    if (
-        // if this is the first letter
-        (letterCount <= 1) &&
-        (randColor1 != randColor2 && randColor2 != randColor3 && randColor3 != randColor1)
-       )
-    {
-      isRepeatedColor = false;
-    }
-    else {
-      if (
-          // if not, check if the colors from the current letter are repeated with those from the previous one
-          (randColor1 != colors1[letterCount - 2] && randColor1 != colors2[letterCount - 2] && randColor1 != colors3[letterCount - 2]) &&
-          (randColor2 != colors1[letterCount - 2] && randColor2 != colors2[letterCount - 2] && randColor2 != colors3[letterCount - 2]) &&
-          (randColor3 != colors1[letterCount - 2] && randColor3 != colors2[letterCount - 2] && randColor3 != colors3[letterCount - 2]) &&
-          (randColor1 != randColor2 && randColor2 != randColor3 && randColor3 != randColor1)
-         )
-      {
-        isRepeatedColor = false;
-      }
-    }
-  }
-
-  print(randColor1);
-  print(randColor2);
-  print(randColor3);
+  pickColors(uni1, uni2);
     
   // push new color
   colors1[letterCount - 1] = randColor1;
