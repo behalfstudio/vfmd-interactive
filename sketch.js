@@ -64,7 +64,7 @@ function setup() {
 
   imageMode(CENTER);
   rectMode(CORNER);
-  textAlign(LEFT, BASELINE);
+  textAlign(LEFT, TOP);
   noStroke();
   blendMode(MULTIPLY);
 
@@ -81,7 +81,7 @@ function setup() {
   fontSize = 269.5; */
   /* blue stone */
   textHeight = 140;
-  fontSize = 120;
+  fontSize = 500;
 
   textSize(fontSize);
 
@@ -114,10 +114,10 @@ function setup() {
   huesAmount = 6;
 
   // margin border
-  margin = 108;
+  margin = 50;
 
-  startX = margin - 10;
-  startY = margin + fontSize * 0.85 - 25;
+  startX = margin;
+  startY = margin - fontSize * 0.28;
 
   availableRegionWidth = width - (margin * 2);
   availableRegionHeight = height - (margin * 2);
@@ -137,6 +137,8 @@ function drawCharacter(_font, _char, _x, _y) {
 }
 
 function draw() {
+  fill(0);
+  rect(0, 0, margin, margin);
   var currentLetter = 0;
 
   // draw letters
@@ -177,7 +179,7 @@ function isCurrentLineFull(_char, _currentLine) {
 }
 
 function isCanvasFull() {
-  return (textHeight * (lineCount() + 1) > availableRegionHeight);
+  return (textHeight * (lineCount()) > availableRegionHeight);
 }
 
 /*------------------------------------------------------------------*/
