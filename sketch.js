@@ -12,6 +12,7 @@ var colors;
 var colors1, colors2, colors3;
 var randColor1, randColor2, randColor3;
 var huesAmount;
+var leastUsedColor;
 
 var startX, startY;
 var x, y;
@@ -48,6 +49,9 @@ function initializeText() {
   colors1 = new Array();
   colors2 = new Array();
   colors3 = new Array();
+
+  usedColorsAmount = [0, 0, 0, 0, 0, 0, 0, 0];
+  leastUsedColor = int(random(0, 8));
 }
 
 function preloadString(_preloadedString) {
@@ -112,6 +116,8 @@ function setup() {
              ],
            ];
   huesAmount = 6;
+
+  usedColorsCode = ["#2B6B42", "#1A5AA3", "#CC3629", "#1A5AA3", "#DB782C", "#CC3629", "#F5B622", "#EB88C3"];
 
   // margin border
   margin = 50;
@@ -293,6 +299,22 @@ function isCurrentLayerRepeated(_char, _prevChar) {
 }
 
 /*------------------------------------------------------------------*/
+
+function difference(_array) {
+  var currentMin = 0,
+      currentMax = 0;
+
+  for (var i = 1; i < _array.length; i++) {
+    if (_array[i] < _array[currentIndex]) {
+      currentMin = i;
+    }
+    if (_array[i] > _array[currentIndex]) {
+      currentMax = i;
+    }
+  }
+
+  return currentMax - currentMin;
+}
 
 function pickColors(_uni1, _uni2) {
   var stillPicking = true;
