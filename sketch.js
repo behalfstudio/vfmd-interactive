@@ -12,6 +12,7 @@ var colors;
 var colors1, colors2, colors3;
 var randColor1, randColor2, randColor3;
 var huesAmount;
+var usedColorsCode, usedColorsAmount;
 var leastUsedColor;
 
 var startX, startY;
