@@ -10,7 +10,8 @@ var prevChar1 = "", prevChar2 = "", prevChar3 = "";
 
 var colors;
 var colors1, colors2, colors3;
-var colorsAmount;
+var randColor1, randColor2, randColor3;
+var huesAmount;
 
 var startX, startY;
 var x, y;
@@ -22,11 +23,11 @@ var charsA = "abcdefghijklmnopqrstuvwxyz0123456789";
 var charsB = "áăắặằẳẵâấậầẩẫạàảãđéêếệềểễẹèẻẽíịìỉĩóôốộồổỗọòỏơớợờởỡõúụùủưứựừửữũýỵỳỷỹ";
 var charsC = ".,:;…!?#/*(){}[]-–—_**$%&@";
 
-var charAvailable1 = "abcdefghijklmnopqrstuvwxyz012469áắậầàđềễẹẻôốọỏờởõụùưựũ-";
-var charAvailable2 = "abcdefghijklmnopqrstuvwxyz012469áắậầàđềễẹẻôốọỏờởõụùưựũ-";
-var charAvailable3 = "abcdefghijklmnopqrstuvwxyz012469áắậầàđềễẹẻôốọỏờởõụùưựũ-";
+var charAvailable1 = "abcdefghijklmnopqrstuvwxyz012469áắậầàđềễẹẻôốọỏờởõụùưựũ-?";
+var charAvailable2 = "abcdefghijklmnopqrstuvwxyz012469áắậầàđềễẹẻôốọỏờởõụùưựũ-?";
+var charAvailable3 = "abcdefghijklmnopqrstuvwxyz012469áắậầàđềễẹẻôốọỏờởõụùưựũ-?";
 
-var preloadedString = "hanoi 2019";
+var preloadedString = "";
 
 /*------------------------------------------------------------------*/
 
@@ -78,20 +79,13 @@ function setup() {
   /* totebag
   textHeight = 250;
   fontSize = 269.5; */
-  /* blue stone 
-  textHeight = 96;
-  fontSize = 80; */
-
-  textHeight = 96;
-  fontSize = 80;
+  /* blue stone */
+  textHeight = 140;
+  fontSize = 120;
 
   textSize(fontSize);
 
   colors = [
-             [
-               "#DB782C", // orange
-               "#CC3629", // red
-             ],
              [
                "#86A840", // light green
                "#2B6B42", // dark green
@@ -101,24 +95,32 @@ function setup() {
                "#1A5AA3", // dark blue
              ],
              [
-               "#F5B622", // yellow
                "#DB782C", // orange
+               "#CC3629", // red
+             ],
+             [
+               "",
+               "#DB782C", // orange
+             ],
+             [
+               "#F5B622", // yellow
+               "",
              ],
              [
                "#EB88C3", // pink
                "",        //
              ],
            ];
-  colorsAmount = 5;
+  huesAmount = 6;
 
   // margin border
-  margin = 30;
+  margin = 108;
 
-  startX = margin;
-  startY = margin + fontSize * 0.85;
+  startX = margin - 10;
+  startY = margin + fontSize * 0.85 - 25;
 
-  availableRegionWidth = windowWidth - (margin * 2);
-  availableRegionHeight = windowHeight - (margin * 2);
+  availableRegionWidth = width - (margin * 2);
+  availableRegionHeight = height - (margin * 2);
 
   preloadString(preloadedString);
 }
@@ -530,11 +532,9 @@ function popCharacter() {
 
 // runs when a key is pressed
 function keyPressed(){
-  /*
   if (keyCode === TAB) {
     save();
   }
-  */
 
   if (keyCode === DELETE || keyCode === BACKSPACE || keyCode === LEFT_ARROW) {
     popCharacter();
