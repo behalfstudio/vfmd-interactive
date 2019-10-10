@@ -320,6 +320,7 @@ function difference(_array) {
 function pickColors(_uni1, _uni2) {
   var stillPicking = true;
   var randHue1, randHue2, randHue3;
+  
 
   var variation1 = parseInt(_uni1[_uni1.length - 1]),
       variation2 = parseInt(_uni2[_uni2.length - 1]);
