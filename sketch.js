@@ -13,7 +13,9 @@ var colors1, colors2, colors3;
 var randColor1, randColor2, randColor3;
 var huesAmount;
 var usedColorsCode, usedColorsAmount;
-var leastUsedColor;
+var fillValue = 2,
+    strokeValue = 1;
+var maxDifference = 5;
 
 var startX, startY;
 var x, y;
@@ -52,7 +54,6 @@ function initializeText() {
   colors3 = new Array();
 
   usedColorsAmount = [0, 0, 0, 0, 0, 0, 0, 0];
-  leastUsedColor = int(random(0, 8));
 }
 
 function preloadString(_preloadedString) {
@@ -86,7 +87,7 @@ function setup() {
   fontSize = 269.5; */
   /* blue stone */
   textHeight = 140;
-  fontSize = 500;
+  fontSize = 120;
 
   textSize(fontSize);
 
@@ -118,7 +119,7 @@ function setup() {
            ];
   huesAmount = 6;
 
-  usedColorsCode = ["#2B6B42", "#1A5AA3", "#CC3629", "#1A5AA3", "#DB782C", "#CC3629", "#F5B622", "#EB88C3"];
+  usedColorsCode = ["#2B6B42", "#1A5AA3", "#CC3629", "#86A840", "#6EB8F0", "#DB782C", "#F5B622", "#EB88C3"];
 
   // margin border
   margin = 50;
@@ -144,8 +145,6 @@ function drawCharacter(_font, _char, _x, _y) {
 }
 
 function draw() {
-  fill(0);
-  rect(0, 0, margin, margin);
   var currentLetter = 0;
 
   // draw letters
@@ -195,6 +194,8 @@ function addLine() {
   textTyped1.push("");
   textTyped2.push("");
   textTyped3.push("");
+
+  usedColorsAmount = [0, 0, 0, 0, 0, 0, 0, 0];
 }
 
 function removeLine() {
@@ -306,21 +307,21 @@ function difference(_array) {
       currentMax = 0;
 
   for (var i = 1; i < _array.length; i++) {
-    if (_array[i] < _array[currentIndex]) {
+    if (_array[i] < _array[currentMin]) {
       currentMin = i;
     }
-    if (_array[i] > _array[currentIndex]) {
+    if (_array[i] > _array[currentMax]) {
       currentMax = i;
     }
   }
 
-  return currentMax - currentMin;
+  return (_array[currentMax] - _array[currentMin]);
 }
 
 function pickColors(_uni1, _uni2) {
   var stillPicking = true;
   var randHue1, randHue2, randHue3;
-  
+  var randValue1, randValue2, randValue3;
 
   var variation1 = parseInt(_uni1[_uni1.length - 1]),
       variation2 = parseInt(_uni2[_uni2.length - 1]);
@@ -334,11 +335,16 @@ function pickColors(_uni1, _uni2) {
     randColor2 = "";
     randColor3 = "";
 
+    randValue1 = 0;
+    randValue2 = 0;
+    randValue3 = 0;
+
     // layer 3
     while (randColor3 == "") {
       randHue3 = int(random(0, huesAmount));
       randColor3 = colors[randHue3][0];
     }
+    randValue3 = fillValue;
 
     // layer 1
     if (variation1 >= 5) {
@@ -347,6 +353,7 @@ function pickColors(_uni1, _uni2) {
         randHue1 = int(random(0, huesAmount));
         randColor1 = colors[randHue1][1];
       }
+      randValue1 = strokeValue;
     }
     else {
       // layer 1 is a fill
@@ -354,6 +361,7 @@ function pickColors(_uni1, _uni2) {
         randHue1 = int(random(0, huesAmount));
         randColor1 = colors[randHue1][int(random(0, 2))];
       }
+      randValue1 = fillValue;
     }
 
     // layer 2
@@ -363,6 +371,7 @@ function pickColors(_uni1, _uni2) {
         randHue2 = int(random(0, huesAmount));
         randColor2 = colors[randHue2][1];
       }
+      randValue2 = strokeValue;
     }
     else {
       // layer 2 is a fill
@@ -370,17 +379,16 @@ function pickColors(_uni1, _uni2) {
         randHue2 = int(random(0, huesAmount));
         randColor2 = colors[randHue2][int(random(0, 2))];
       }
+      randValue2 = strokeValue;
     }
 
-    print("1 " + randColor1 + " " + randHue1);
-    print("2 " + randColor2 + " " + randHue2);
-    print("3 " + randColor3 + " " + randHue3);
-
-    stillPicking = !checkColors(randColor1, randColor2, randColor3, randHue1, randHue2, randHue3);
+    stillPicking = !checkColors(randColor1, randColor2, randColor3, randHue1, randHue2, randHue3, randValue1, randValue2, randValue3);
   }
+
+  print(usedColorsAmount);
 }
 
-function checkColors(_color1, _color2, _color3, _hue1, _hue2, _hue3) {
+function checkColors(_color1, _color2, _color3, _hue1, _hue2, _hue3, _value1, _value2, _value3) {
 
   // check if the hues are repeated
   if (_hue1 > 1 && _hue2 > 1 && _hue3 > 1) {
@@ -440,6 +448,18 @@ function checkColors(_color1, _color2, _color3, _hue1, _hue2, _hue3) {
     if (countRepeatedColors > 1) {
       return false;
     }
+  }
+  
+  usedColorsAmount[usedColorsCode.indexOf(_color1)] += _value1;
+  usedColorsAmount[usedColorsCode.indexOf(_color2)] += _value2;
+  usedColorsAmount[usedColorsCode.indexOf(_color3)] += _value3;
+
+  if (difference(usedColorsAmount) > maxDifference) {
+    usedColorsAmount[usedColorsCode.indexOf(_color1)] -= _value1;
+    usedColorsAmount[usedColorsCode.indexOf(_color2)] -= _value2;
+    usedColorsAmount[usedColorsCode.indexOf(_color3)] -= _value3;
+
+    return false;
   }
 
   return true;
