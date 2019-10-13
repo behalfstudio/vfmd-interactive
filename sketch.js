@@ -13,9 +13,10 @@ var colors1, colors2, colors3;
 var randColor1, randColor2, randColor3;
 var huesAmount;
 var usedColorsCode, usedColorsAmount;
-var fillValue = 2,
-    strokeValue = 1;
-var maxDifference = 5;
+var fillValue = 9,
+    strokeValue = 5;
+var maxDifference = 20;
+var maxComputeTimes = 20;
 
 var startX, startY;
 var x, y;
@@ -53,7 +54,7 @@ function initializeText() {
   colors2 = new Array();
   colors3 = new Array();
 
-  usedColorsAmount = [0, 0, 0, 0, 0, 0, 0, 0];
+  resetColors();
 }
 
 function preloadString(_preloadedString) {
@@ -70,7 +71,7 @@ function setup() {
 
   imageMode(CENTER);
   rectMode(CORNER);
-  textAlign(LEFT, TOP);
+  textAlign(LEFT, BASELINE);
   noStroke();
   blendMode(MULTIPLY);
 
@@ -125,7 +126,7 @@ function setup() {
   margin = 50;
 
   startX = margin;
-  startY = margin - fontSize * 0.28;
+  startY = margin + fontSize * 0.72;
 
   availableRegionWidth = width - (margin * 2);
   availableRegionHeight = height - (margin * 2);
@@ -156,6 +157,8 @@ function draw() {
     // line coordinate
     x = startX;
     y = startY + (textHeight * line);
+
+    
 
     for (var i = 0; i < currentLine1.length; i++) {
       // layer 3
@@ -194,8 +197,6 @@ function addLine() {
   textTyped1.push("");
   textTyped2.push("");
   textTyped3.push("");
-
-  usedColorsAmount = [0, 0, 0, 0, 0, 0, 0, 0];
 }
 
 function removeLine() {
@@ -302,6 +303,10 @@ function isCurrentLayerRepeated(_char, _prevChar) {
 
 /*------------------------------------------------------------------*/
 
+function resetColors() {
+  usedColorsAmount = [0, 0, 0, 0, 0, 0, 0, 0];
+}
+
 function difference(_array) {
   var currentMin = 0,
       currentMax = 0;
@@ -322,6 +327,7 @@ function pickColors(_uni1, _uni2) {
   var stillPicking = true;
   var randHue1, randHue2, randHue3;
   var randValue1, randValue2, randValue3;
+  var iteration = 0;
 
   var variation1 = parseInt(_uni1[_uni1.length - 1]),
       variation2 = parseInt(_uni2[_uni2.length - 1]);
@@ -331,6 +337,11 @@ function pickColors(_uni1, _uni2) {
   randColor3 = "";
 
   while (stillPicking) {
+    if (iteration > maxComputeTimes) {
+      resetColors();
+      iteration = 0;
+    }
+
     randColor1 = "";
     randColor2 = "";
     randColor3 = "";
@@ -383,8 +394,11 @@ function pickColors(_uni1, _uni2) {
     }
 
     stillPicking = !checkColors(randColor1, randColor2, randColor3, randHue1, randHue2, randHue3, randValue1, randValue2, randValue3);
+
+    iteration++;
   }
 
+  print(difference(usedColorsAmount));
   print(usedColorsAmount);
 }
 
@@ -419,27 +433,35 @@ function checkColors(_color1, _color2, _color3, _hue1, _hue2, _hue3, _value1, _v
 
     if (_color1 == colors1[letterCount - 2]) {
       countRepeatedColors++;
+      return false;
     }
     if (_color2 == colors1[letterCount - 2]) {
       countRepeatedColors++;
+      return false;
     }
     if (_color3 == colors1[letterCount - 2]) {
       countRepeatedColors++;
+      return false;
     }
     if (_color1 == colors2[letterCount - 2]) {
       countRepeatedColors++;
+      return false;
     }
     if (_color2 == colors2[letterCount - 2]) {
       countRepeatedColors++;
+      return false;
     }
     if (_color3 == colors2[letterCount - 2]) {
       countRepeatedColors++;
+      return false;
     }
     if (_color1 == colors3[letterCount - 2]) {
       countRepeatedColors++;
+      return false;
     }
     if (_color2 == colors3[letterCount - 2]) {
       countRepeatedColors++;
+      return false;
     }
     if (_color3 == colors3[letterCount - 2]) {
       return false;
@@ -594,6 +616,10 @@ function keyPressed(){
     else {   
       addLine();
     }
+  }
+
+  if (keyCode === RIGHT_ARROW) {
+    pushCharacter(" ");
   }
 
   // redraw
