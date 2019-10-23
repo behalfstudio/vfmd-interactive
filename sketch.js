@@ -26,13 +26,13 @@ var availableRegionWidth, availableRegionHeight;
 
 var charsA = "abcdefghijklmnopqrstuvwxyz0123456789";
 var charsB = "áăắặằẳẵâấậầẩẫạàảãđéêếệềểễẹèẻẽíịìỉĩóôốộồổỗọòỏơớợờởỡõúụùủưứựừửữũýỵỳỷỹ";
-var charsC = ".,:;…!?#/*(){}[]-–—_**$%&@";
+var charsC = ".,:;…!?·#/*(){}[]-–—_**$%&@";
 
-var charAvailable1 = "abcdefghijklmnopqrstuvwxyz012469áắậầàđềễẹẻôốọỏờởõụùưựũ-?";
-var charAvailable2 = "abcdefghijklmnopqrstuvwxyz012469áắậầàđềễẹẻôốọỏờởõụùưựũ-?";
-var charAvailable3 = "abcdefghijklmnopqrstuvwxyz012469áắậầàđềễẹẻôốọỏờởõụùưựũ-?";
+var charAvailable1 = "abcdefghijklmnopqrstuvwxyz0123456789áăắặằẳẵâấậầẩẫạàảãđéêếệềểễẹèẻẽíịìỉĩóôốộồổỗọòỏơớợờởỡõúụùủưứựừửữũýỵỳỷỹ:?·-&";
+var charAvailable2 = "abcdefghijklmnopqrstuvwxyz0123456789áăắặằẳẵâấậầẩẫạàảãđéêếệềểễẹèẻẽíịìỉĩóôốộồổỗọòỏơớợờởỡõúụùủưứựừửữũýỵỳỷỹ:?·-&";
+var charAvailable3 = "abcdefghijklmnopqrstuvwxyz0123456789áăắặằẳẵâấậầẩẫạàảãđéêếệềểễẹèẻẽíịìỉĩóôốộồổỗọòỏơớợờởỡõúụùủưứựừửữũýỵỳỷỹ:?·-&";
 
-var preloadedString = "";
+var preloadedString = "tòhe·vo·lu·tion";
 
 /*------------------------------------------------------------------*/
 
