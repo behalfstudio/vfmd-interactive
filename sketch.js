@@ -146,10 +146,6 @@ function loadString(_preloadedString) {
     if (isValid) {
       pushCharacter(_preloadedString[i]);
     }
-
-    if (_preloadedString[i] == ' ') {
-      pushCharacter(' ');
-    }
   }
 }
 
