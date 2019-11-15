@@ -181,7 +181,7 @@ function draw() {
   loadString(currentInputValue);
 
 
-  print(textTyped1);
+  print(colors1);
 
   var currentLetter = 0;
 
