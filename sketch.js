@@ -78,7 +78,7 @@ function setup() {
   pixelDensity(1);
   smooth();
 
-  frameRate(2);
+  frameRate(1);
 
   initializeText();
 
