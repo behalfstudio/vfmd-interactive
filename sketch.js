@@ -16,7 +16,7 @@ var usedColorsCode, usedColorsAmount;
 var fillValue = 9,
     strokeValue = 5;
 var maxDifference = 20;
-var maxComputeTimes = 20;
+var maxComputeTimes = 5;
 
 var startX, startY;
 var x, y;
@@ -574,4 +574,12 @@ function pushCharacter(_key) {
   colors1[letterCount - 1] = randColor1;
   colors2[letterCount - 1] = randColor2;
   colors3[letterCount - 1] = randColor3;
+}
+
+void keyPressed() {
+  noLoop();
+}
+
+void keyReleased() {
+  loop();
 }
