@@ -178,7 +178,7 @@ function draw() {
   */
 
   initializeText();
-  loadString(currentInputValue);
+  loadString(inputValue);
 
 
   print(colors1);
