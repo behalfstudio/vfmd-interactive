@@ -77,7 +77,6 @@ function setup() {
   select('canvas').position(canvasMargin, canvasMargin);
   pixelDensity(1);
   smooth();
-  background(255);
 
   initializeText();
 
@@ -85,7 +84,6 @@ function setup() {
   rectMode(CORNER);
   textAlign(LEFT, BASELINE);
   noStroke();
-  blendMode(MULTIPLY);
 
   colors = [
              [
@@ -163,7 +161,9 @@ function drawCharacter(_font, _char, _x, _y) {
 }
 
 function draw() {
+  blendMode(NORMAL);
   background(255);
+  blendMode(MULTIPLY);
 
   updateValues();
 
