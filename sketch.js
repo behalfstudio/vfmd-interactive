@@ -80,7 +80,7 @@ function setup() {
 
   loop();
 
-  frameRate(2);
+  frameRate(1);
 
   initializeText();
 
