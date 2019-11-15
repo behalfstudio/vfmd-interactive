@@ -21,26 +21,34 @@ var maxComputeTimes = 20;
 var startX, startY;
 var x, y;
 
-var margin;
+var canvasMargin = 50;
+var canvasWidth, canvasHeight;
+
+var textMargin;
 var availableRegionWidth, availableRegionHeight;
+
+var fontSizeSlider, lineHeightSlider;
 
 var charsA = "abcdefghijklmnopqrstuvwxyz0123456789";
 var charsB = "áăắặằẳẵâấậầẩẫạàảãđéêếệềểễẹèẻẽíịìỉĩóôốộồổỗọòỏơớợờởỡõúụùủưứựừửữũýỵỳỷỹ";
-var charsC = ".,:;…!?·#/*(){}[]-–—_**$%&@";
+var charsC = ".,:;…!?·-–—_$%&@";
 
-var charAvailable1 = "abcdefghijklmnopqrstuvwxyz0123456789áăắặằẳẵâấậầẩẫạàảãđéêếệềểễẹèẻẽíịìỉĩóôốộồổỗọòỏơớợờởỡõúụùủưứựừửữũýỵỳỷỹ:?·-&";
-var charAvailable2 = "abcdefghijklmnopqrstuvwxyz0123456789áăắặằẳẵâấậầẩẫạàảãđéêếệềểễẹèẻẽíịìỉĩóôốộồổỗọòỏơớợờởỡõúụùủưứựừửữũýỵỳỷỹ:?·-&";
-var charAvailable3 = "abcdefghijklmnopqrstuvwxyz0123456789áăắặằẳẵâấậầẩẫạàảãđéêếệềểễẹèẻẽíịìỉĩóôốộồổỗọòỏơớợờởỡõúụùủưứựừửữũýỵỳỷỹ:?·-&";
+var charAvailable1 = "abcdefghijklmnopqrstuvwxyz0123456789áăắặằẳẵâấậầẩẫạàảãđéêếệềểễẹèẻẽíịìỉĩóôốộồổỗọòỏơớợờởỡõúụùủưứựừửữũýỵỳỷỹ.,:;…!?·-–—_$%&@";
+var charAvailable2 = "abcdefghijklmnopqrstuvwxyz0123456789áăắặằẳẵâấậầẩẫạàảãđéêếệềểễẹèẻẽíịìỉĩóôốộồổỗọòỏơớợờởỡõúụùủưứựừửữũýỵỳỷỹ.,:;…!?·-–—_$%&@";
+var charAvailable3 = "abcdefghijklmnopqrstuvwxyz0123456789áăắặằẳẵâấậầẩẫạàảãđéêếệềểễẹèẻẽíịìỉĩóôốộồổỗọòỏơớợờởỡõúụùủưứựừửữũýỵỳỷỹ.,:;…!?·-–—_$%&@";
 
-var preloadedString = "tòhe·vo·lu·tion";
+var input;
+var inputValue;
+
+var currentInputValue = "";
 
 /*------------------------------------------------------------------*/
 
 function preload() {
   // read in the font to opentype.js
-  font1 = loadFont("assets/3Dinh-Mau.otf");
-  font2 = loadFont("assets/3Dinh-Thuong.otf");
-  font3 = loadFont("assets/3Dinh-MyKhe.otf");
+  //font1 = loadFont("assets/3Dinh-Mau.otf");
+  //font2 = loadFont("assets/3Dinh-Thuong.otf");
+  //font3 = loadFont("assets/3Dinh-MyKhe.otf");
 }
 
 function initializeText() {
@@ -57,40 +65,27 @@ function initializeText() {
   resetColors();
 }
 
-function preloadString(_preloadedString) {
-  for (var i = 0; i < _preloadedString.length; i++) {
-    pushCharacter(_preloadedString[i]);
-  }
-}
-
 function setup() {
-  createCanvas(windowWidth, windowHeight);
+  input = select("#textfield");
+  fontSizeSlider = select('#font-size');
+  lineHeightSlider = select('#line-height');
+
+  canvasWidth = windowWidth - canvasMargin - input.width - 100;
+  canvasHeight = windowHeight - canvasMargin*2;
+
+  createCanvas(canvasWidth, canvasHeight);
+  select('canvas').position(canvasMargin, canvasMargin);
   pixelDensity(1);
   smooth();
-  noLoop();
+  background(255);
+
+  initializeText();
 
   imageMode(CENTER);
   rectMode(CORNER);
   textAlign(LEFT, BASELINE);
   noStroke();
   blendMode(MULTIPLY);
-
-  initializeText();
-  
-  /* default 
-  textHeight = 180;
-  fontSize = 187;*/
-  /* promo poster 
-  textHeight = 242;
-  fontSize = 210; */
-  /* totebag
-  textHeight = 250;
-  fontSize = 269.5; */
-  /* blue stone */
-  textHeight = 140;
-  fontSize = 120;
-
-  textSize(fontSize);
 
   colors = [
              [
@@ -123,19 +118,41 @@ function setup() {
   usedColorsCode = ["#2B6B42", "#1A5AA3", "#CC3629", "#86A840", "#6EB8F0", "#DB782C", "#F5B622", "#EB88C3"];
 
   // margin border
-  margin = 50;
+  textMargin = 50;
+}
 
-  startX = margin;
-  startY = margin + fontSize * 0.72;
+function updateValues() {
+  inputValue = input.value();
+  fontSize = fontSizeSlider.value();
+  textHeight = lineHeightSlider.value();
 
-  availableRegionWidth = width - (margin * 2);
-  availableRegionHeight = height - (margin * 2);
+  textSize(fontSize);
 
-  preloadString(preloadedString);
+  startX = textMargin;
+  startY = textMargin + fontSize * 0.72;
+
+  availableRegionWidth = windowWidth - (textMargin * 2);
+  availableRegionHeight = windowHeight - (textMargin * 2);
+}
+
+function loadString(_preloadedString) {
+  _preloadedString = _preloadedString.toLowerCase();
+
+  for (var i = 0; i < _preloadedString.length; i++) {
+    if (_preloadedString[i] == '\n') {
+      addLine();
+    }
+
+    var isValid = charsA.includes(_preloadedString[i]) || charsB.includes(_preloadedString[i]) || charsC.includes(_preloadedString[i]);
+
+    if (isValid) {
+      pushCharacter(_preloadedString[i]);
+    }
+  }
 }
 
 function lineCount() {
-  return textTyped1.length;;
+  return textTyped1.length;
 }
 
 /*------------------------------------------------------------------*/
@@ -146,6 +163,19 @@ function drawCharacter(_font, _char, _x, _y) {
 }
 
 function draw() {
+  clear();
+
+  updateValues();
+
+  if (currentInputValue != inputValue) {
+    currentInputValue = inputValue;
+    initializeText();
+    loadString(currentInputValue);
+  }
+
+
+  print(textTyped1);
+
   var currentLetter = 0;
 
   // draw letters
@@ -158,20 +188,21 @@ function draw() {
     x = startX;
     y = startY + (textHeight * line);
 
-    
-
     for (var i = 0; i < currentLine1.length; i++) {
       // layer 3
       fill(colors3[currentLetter]);
-      drawCharacter(font3, currentLine3[i], x, y);
+      //drawCharacter(font3, currentLine3[i], x, y);
+      rect(x, y, 10, 10);
 
       // layer 1
       fill(colors1[currentLetter]);
-      drawCharacter(font1, currentLine1[i], x, y);
+      //drawCharacter(font1, currentLine1[i], x, y);
+      rect(x, y, 10, 10);
 
       // layer 2
       fill(colors2[currentLetter]);
-      drawCharacter(font2, currentLine2[i], x, y);
+      //drawCharacter(font2, currentLine2[i], x, y);
+      rect(x, y, 10, 10);
 
       currentLetter++;
 
@@ -197,20 +228,6 @@ function addLine() {
   textTyped1.push("");
   textTyped2.push("");
   textTyped3.push("");
-}
-
-function removeLine() {
-  textTyped1.pop();
-  textTyped2.pop();
-  textTyped3.pop();
-}
-
-function removeLastCharacter(str) {
-  if (str.length > 0) {
-    return str.substring(0, str.length - 1); 
-  }
-  
-  return "";
 }
 
 /*------------------------------------------------------------------*/
@@ -397,9 +414,6 @@ function pickColors(_uni1, _uni2) {
 
     iteration++;
   }
-
-  print(difference(usedColorsAmount));
-  print(usedColorsAmount);
 }
 
 function checkColors(_color1, _color2, _color3, _hue1, _hue2, _hue3, _value1, _value2, _value3) {
@@ -543,17 +557,6 @@ function pushCharacter(_key) {
     char3 = _key;
   }
 
-  // check if current line is full
-  if (isCurrentLineFull(char1, textTyped1[lineCount() - 1])) {
-    // check if canvas is full
-    if (isCanvasFull()) {
-      initializeText();
-    }
-    else {
-      addLine();
-    }
-  }
-
   // push new character
   textTyped1[lineCount() - 1] += char1;
   textTyped2[lineCount() - 1] += char2;
@@ -567,78 +570,4 @@ function pushCharacter(_key) {
   colors1[letterCount - 1] = randColor1;
   colors2[letterCount - 1] = randColor2;
   colors3[letterCount - 1] = randColor3;
-}
-
-/*------------------------------------------------------------------*/
-
-function popCharacter() {
-  // canvas is near empty
-  if (letterCount <= 1) {
-    initializeText();
-  }
-
-  // canvas is not empty
-  else {
-    // current line is near empty
-    if (textTyped1[lineCount() - 1].length <= 1) {
-      removeLine();
-      letterCount--;
-    }
-
-    // current line is not empty
-    else {
-      textTyped1[lineCount() - 1] = removeLastCharacter(textTyped1[lineCount() - 1]);
-      textTyped2[lineCount() - 1] = removeLastCharacter(textTyped2[lineCount() - 1]);
-      textTyped3[lineCount() - 1] = removeLastCharacter(textTyped3[lineCount() - 1]);
-
-      letterCount--;
-    }
-  }
-}
-
-/*------------------------------------------------------------------*/
-
-// runs when a key is pressed
-function keyPressed(){
-  if (keyCode === TAB) {
-    save();
-  }
-
-  if (keyCode === DELETE || keyCode === BACKSPACE || keyCode === LEFT_ARROW) {
-    popCharacter();
-  }
-
-  if (keyCode === ENTER || keyCode === RETURN) {
-    // canvas is full
-    if (isCanvasFull()) {
-      initializeText();
-    }
-    else {   
-      addLine();
-    }
-  }
-
-  if (keyCode === RIGHT_ARROW) {
-    pushCharacter(" ");
-  }
-
-  // redraw
-  clear();
-  redraw();
-}
-
-// runs when a key is pressed
-function keyTyped() {
-  // convert uppercase to lowercase (if any)
-  var letter = key.toLowerCase();
-
-  // check if key is included in the available letter set
-  var isValid = charsA.includes(letter) || charsB.includes(letter) || charsC.includes(letter);
-  if (isValid) {
-    pushCharacter(letter);
-  }
-  
-  // redraw
-  clear();
-  redraw();
 }
