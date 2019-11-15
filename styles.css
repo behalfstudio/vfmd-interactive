@@ -33,15 +33,15 @@ a:hover {
 }
 
 #textfield {
-    width: 200px;
+    width: 225px;
     height: 80px;
-    margin-top: 50px;
+    margin-top: 25px;
 }
 
 #bottom {
     position: fixed;
-    bottom: 50px;
-    width: 200px;
+    bottom: 25px;
+    width: 225px;
 }
 
 #bottom p {
@@ -56,5 +56,5 @@ a:hover {
 }
 
 .slider input {
-    width: 200px;
+    width: 225px;
 }

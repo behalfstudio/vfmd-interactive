@@ -21,7 +21,7 @@ var maxComputeTimes = 20;
 var startX, startY;
 var x, y;
 
-var canvasMargin = 50;
+var canvasMargin = 25;
 var canvasWidth, canvasHeight;
 
 var textMargin;
@@ -70,7 +70,7 @@ function setup() {
   fontSizeSlider = select('#font-size');
   lineHeightSlider = select('#line-height');
 
-  canvasWidth = windowWidth - canvasMargin - input.width - 100;
+  canvasWidth = windowWidth - canvasMargin - input.width - 50;
   canvasHeight = windowHeight - canvasMargin*2;
 
   createCanvas(canvasWidth, canvasHeight);
