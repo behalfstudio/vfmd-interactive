@@ -78,6 +78,8 @@ function setup() {
   pixelDensity(1);
   smooth();
 
+  frameRate(5);
+
   initializeText();
 
   imageMode(CENTER);
@@ -167,11 +169,16 @@ function draw() {
 
   updateValues();
 
+  /*
   if (currentInputValue != inputValue) {
     currentInputValue = inputValue;
     initializeText();
     loadString(currentInputValue);
   }
+  */
+
+  initializeText();
+  loadString(currentInputValue);
 
 
   print(textTyped1);
