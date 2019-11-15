@@ -124,7 +124,7 @@ function setup() {
 function updateValues() {
   inputValue = input.value();
   fontSize = fontSizeSlider.value();
-  textHeight = lineHeightSlider.value();
+  textHeight = lineHeightSlider.value()*fontSize;
 
   textSize(fontSize);
 
