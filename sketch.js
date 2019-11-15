@@ -78,6 +78,8 @@ function setup() {
   pixelDensity(1);
   smooth();
 
+  loop();
+
   frameRate(1);
 
   initializeText();
@@ -576,10 +578,11 @@ function pushCharacter(_key) {
   colors3[letterCount - 1] = randColor3;
 }
 
-void keyPressed() {
+
+function keyPressed() {
   noLoop();
 }
 
-void keyReleased() {
+function keyReleased() {
   loop();
 }
