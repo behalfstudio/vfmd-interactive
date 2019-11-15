@@ -46,9 +46,9 @@ var currentInputValue = "";
 
 function preload() {
   // read in the font to opentype.js
-  //font1 = loadFont("assets/3Dinh-Mau.otf");
-  //font2 = loadFont("assets/3Dinh-Thuong.otf");
-  //font3 = loadFont("assets/3Dinh-MyKhe.otf");
+  font1 = loadFont("assets/3Dinh-Mau.otf");
+  font2 = loadFont("assets/3Dinh-Thuong.otf");
+  font3 = loadFont("assets/3Dinh-MyKhe.otf");
 }
 
 function initializeText() {
@@ -163,7 +163,7 @@ function drawCharacter(_font, _char, _x, _y) {
 }
 
 function draw() {
-  clear();
+  background(255);
 
   updateValues();
 
@@ -191,18 +191,15 @@ function draw() {
     for (var i = 0; i < currentLine1.length; i++) {
       // layer 3
       fill(colors3[currentLetter]);
-      //drawCharacter(font3, currentLine3[i], x, y);
-      rect(x, y, 10, 10);
+      drawCharacter(font3, currentLine3[i], x, y);
 
       // layer 1
       fill(colors1[currentLetter]);
-      //drawCharacter(font1, currentLine1[i], x, y);
-      rect(x, y, 10, 10);
+      drawCharacter(font1, currentLine1[i], x, y);
 
       // layer 2
       fill(colors2[currentLetter]);
-      //drawCharacter(font2, currentLine2[i], x, y);
-      rect(x, y, 10, 10);
+      drawCharacter(font2, currentLine2[i], x, y);
 
       currentLetter++;
 
