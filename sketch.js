@@ -16,7 +16,7 @@ var usedColorsCode, usedColorsAmount;
 var fillValue = 9,
     strokeValue = 5;
 var maxDifference = 20;
-var maxComputeTimes = 20;
+var maxComputeTimes = 5;
 
 var startX, startY;
 var x, y;
